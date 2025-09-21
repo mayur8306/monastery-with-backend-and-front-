@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Map - Visit Sikkim</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Leaflet.js CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f7f4; /* Light Mint-Green Background */
+        }
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+        .dropdown-menu {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .nav-link {
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #f59e0b; /* Amber-500 */
+            transition: width 0.3s ease-in-out;
+        }
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+        /* Custom scrollbar for monastery list */
+        .monastery-list::-webkit-scrollbar {
+            width: 8px;
+        }
+        .monastery-list::-webkit-scrollbar-track {
+            background: #e0e7e4;
+        }
+        .monastery-list::-webkit-scrollbar-thumb {
+            background-color: #00796b; /* Darker Teal */
+            border-radius: 4px;
+            border: 2px solid #e0e7e4;
+        }
+        .monastery-list-item {
+            transition: all 0.2s ease-in-out;
+        }
+        .monastery-list-item:hover, .monastery-list-item.active {
+            background-color: #e0f2f1; /* Lighter Teal */
+            transform: translateX(4px);
+            border-left-color: #ffc107; /* Gold */
+        }
+        /* Leaflet Popup Styling */
+        .leaflet-popup-content-wrapper {
+            border-radius: 8px;
+            background: #fff;
+        }
+        .leaflet-popup-content {
+            margin: 12px !important;
+        }
+        .leaflet-popup-tip {
+            background: #fff;
+        }
+        .popup-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin: 0 0 4px 0;
+            color: #004d40;
+        }
+        .popup-description {
+            font-size: 0.9rem;
+            margin: 0;
+            color: #374151;
+        }
+        /* Ensure map is always visible */
+        #map { z-index: 0; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header & Navigation -->
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <a href="index.html" class="flex items-center space-x-2">
+                    <div class="bg-slate-900 text-white rounded-full h-10 w-10 flex items-center justify-center">
+                        <i class="fa-solid fa-mountain-sun"></i>
+                    </div>
+                    <span class="text-2xl font-bold text-slate-800">VisitSikkim</span>
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-slate-600 hover:text-amber-500 font-medium nav-link">Home</a>
+                    <div class="relative dropdown">
+                        <button class="text-amber-500 font-medium nav-link flex items-center active">
+                            Explore <i class="fa-solid fa-chevron-down ml-2 text-xs"></i>
+                        </button>
+                        <div class="dropdown-menu absolute left-0 mt-2 w-48 bg-white rounded-lg shadow-xl py-2">
+                            <a href="tour.html" class="block px-4 py-2 text-slate-700 hover:bg-amber-50">Virtual Tours</a>
+                            <a href="interactive.html" class="block px-4 py-2 text-slate-700 bg-amber-50 font-semibold">Interactive Map</a>
+                            <a href="#" class="block px-4 py-2 text-slate-700 hover:bg-amber-50">Monastery Guide</a>
+                        </div>
+                    </div>
+                    <div class="relative dropdown">
+                        <button class="text-slate-600 hover:text-amber-500 font-medium nav-link flex items-center">
+                            Plan Your Visit <i class="fa-solid fa-chevron-down ml-2 text-xs"></i>
+                        </button>
+                         <div class="dropdown-menu absolute left-0 mt-2 w-56 bg-white rounded-lg shadow-xl py-2">
+                            <a href="#" class="block px-4 py-2 text-slate-700 hover:bg-amber-50">Events & Festivals</a>
+                            <a href="#" class="block px-4 py-2 text-slate-700 hover:bg-amber-50">Book an Experience</a>
+                            <a href="#" class="block px-4 py-2 text-slate-700 hover:bg-amber-50">Travel & Stay</a>
+                        </div>
+                    </div>
+                    <div class="relative dropdown">
+                        <button class="text-slate-600 hover:text-amber-500 font-medium nav-link flex items-center">
+                            Digital Archives <i class="fa-solid fa-chevron-down ml-2 text-xs"></i>
+                        </button>
+                        <div class="dropdown-menu absolute left-0 mt-2 w-56 bg-white rounded-lg shadow-xl py-2">
+                            <a href="#" class="block px-4 py-2 text-slate-700 hover:bg-amber-50">Search The Archives</a>
+                            <a href="#" class="block px-4 py-2 text-slate-700 hover:bg-amber-50">Manuscripts</a>
+                            <a href="#" class="block px-4 py-2 text-slate-700 hover:bg-amber-50">Murals & Art</a>
+                        </div>
+                    </div>
+                     <a href="#" class="text-slate-600 hover:text-amber-500 font-medium nav-link">About Us</a>
+                </div>
+                <div class="hidden md:flex items-center space-x-4">
+                     <a href="#" class="bg-amber-500 text-white font-semibold px-5 py-2 rounded-lg hover:bg-amber-600 transition duration-300">Login</a>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="text-slate-800 focus:outline-none">
+                        <i class="fa-solid fa-bars fa-lg"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden mt-4">
+                <a href="index.html" class="block py-2 px-4 text-slate-600 hover:bg-amber-50 rounded">Home</a>
+                <div class="mt-2">
+                    <h3 class="font-semibold px-4 mb-2 text-amber-600">Explore</h3>
+                    <a href="tour.html" class="block py-2 px-6 text-sm text-slate-600 hover:bg-amber-50 rounded">Virtual Tours</a>
+                    <a href="interactive.html" class="block py-2 px-6 text-sm text-slate-600 bg-amber-50 rounded font-semibold">Interactive Map</a>
+                    <a href="#" class="block py-2 px-6 text-sm text-slate-600 hover:bg-amber-50 rounded">Monastery Guide</a>
+                </div>
+                <div class="mt-2">
+                    <h3 class="font-semibold px-4 mb-2 text-slate-800">Plan Your Visit</h3>
+                    <a href="#" class="block py-2 px-6 text-sm text-slate-600 hover:bg-amber-50 rounded">Events & Festivals</a>
+                    <a href="#" class="block py-2 px-6 text-sm text-slate-600 hover:bg-amber-50 rounded">Book an Experience</a>
+                    <a href="#" class="block py-2 px-6 text-sm text-slate-600 hover:bg-amber-50 rounded">Travel & Stay</a>
+                </div>
+                 <div class="mt-2">
+                    <h3 class="font-semibold px-4 mb-2 text-slate-800">Digital Archives</h3>
+                     <a href="#" class="block py-2 px-6 text-sm text-slate-600 hover:bg-amber-50 rounded">Search The Archives</a>
+                    <a href="#" class="block py-2 px-6 text-sm text-slate-600 hover:bg-amber-50 rounded">Manuscripts</a>
+                    <a href="#" class="block py-2 px-6 text-sm text-slate-600 hover:bg-amber-50 rounded">Murals & Art</a>
+                </div>
+                <a href="#" class="block py-2 px-4 text-slate-600 hover:bg-amber-50 rounded mt-2">About Us</a>
+                <a href="#" class="block mt-4 w-full text-center bg-amber-500 text-white font-semibold px-5 py-2 rounded-lg hover:bg-amber-600 transition duration-300">Login</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="flex flex-col lg:flex-row h-[calc(100vh-80px)]">
+            <!-- Sidebar -->
+            <aside class="w-full lg:w-1/3 xl:w-1/4 bg-white shadow-lg flex flex-col">
+                <div class="p-6 border-b border-gray-200 bg-teal-800 text-white">
+                    <h1 class="text-2xl font-bold">Sikkim Monasteries</h1>
+                    <p class="text-sm text-teal-100 mt-1">Click a name to locate it on the map.</p>
+                </div>
+                <div id="monastery-list" class="flex-1 overflow-y-auto monastery-list p-4 space-y-2">
+                    <!-- Monastery items will be injected here by JavaScript -->
+                </div>
+            </aside>
+
+            <!-- Map Area -->
+            <section id="map" class="flex-1 h-full min-h-[300px] lg:h-auto">
+                <!-- Leaflet Map will be initialized here -->
+            </section>
+        </div>
+    </main>
+    
+    <!-- Leaflet.js Script -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    
+    <script>
+        const monasteries = [
+            { name: "Rumtek Monastery", lat: 27.291351, lng: 88.566373, description: "A sprawling complex and a pivotal center for Tibetan Buddhism." },
+            { name: "Pemayangtse Monastery", lat: 27.301550, lng: 88.256884, description: "One of the oldest and premier monasteries, famed for its intricate wooden sculptures." },
+            { name: "Tashiding Monastery", lat: 27.271318, lng: 88.286164, description: "Considered the spiritual center of Sikkim, perched on a heart-shaped hill." },
+            { name: "Ralang Monastery", lat: 27.320476, lng: 88.384594, description: "A treasure of Buddhist art, known for its collection of paintings." },
+            { name: "Enchey Monastery", lat: 27.340915, lng: 88.618635, description: "Meaning 'the solitary temple', offering spectacular views of Kanchenjunga." },
+            { name: "Lingdum (Ranka) Monastery", lat: 27.329977, lng: 88.650849, description: "A picturesque complex serving as a training center for young lamas." },
+            { name: "Phodong Monastery", lat: 27.429396, lng: 88.618610, description: "One of the six most important monasteries in Sikkim, belonging to the Kagyupa sect." },
+            { name: "Dubdi Monastery", lat: 27.375681, lng: 88.225586, description: "Often called the 'Hermit's Cell', this is the oldest monastery in Sikkim." }
+        ];
+
+        let map;
+        let markers = [];
+        const listContainer = document.getElementById('monastery-list');
+
+        function initMap() {
+            const sikkimCenter = [27.5330, 88.5122];
+            map = L.map('map').setView(sikkimCenter, 9);
+
+            // Add the OpenStreetMap tile layer
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            // Create a custom icon
+            const monasteryIcon = L.divIcon({
+                html: `<i class="fa-solid fa-place-of-worship fa-2x" style="color: #004D40;"></i>`,
+                className: 'bg-transparent border-0',
+                iconSize: [24, 24],
+                iconAnchor: [12, 24],
+                popupAnchor: [0, -24]
+            });
+
+            monasteries.forEach((monastery, index) => {
+                // Create Marker
+                const marker = L.marker([monastery.lat, monastery.lng], { icon: monasteryIcon }).addTo(map);
+
+                // Create Popup
+                const popupContent = `
+                    <h3 class="popup-title">${monastery.name}</h3>
+                    <p class="popup-description">${monastery.description}</p>
+                `;
+                marker.bindPopup(popupContent);
+                
+                markers.push(marker);
+
+                // Add click listener to marker
+                marker.on('click', () => {
+                    updateActiveListItem(index);
+                });
+
+                // Create List Item
+                const listItem = document.createElement('div');
+                listItem.className = 'monastery-list-item cursor-pointer p-4 border-l-4 border-transparent';
+                listItem.innerHTML = `
+                    <h3 class="font-semibold text-teal-900">${monastery.name}</h3>
+                    <p class="text-sm text-gray-600">${monastery.description}</p>
+                `;
+                listItem.addEventListener('click', () => {
+                    map.setView(marker.getLatLng(), 13);
+                    marker.openPopup();
+                    updateActiveListItem(index);
+                });
+                listContainer.appendChild(listItem);
+            });
+        }
+
+        function updateActiveListItem(index) {
+            document.querySelectorAll('.monastery-list-item').forEach((item, i) => {
+                if (i === index) {
+                    item.classList.add('active');
+                    item.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+        
+        // Initialize the map once the DOM is ready
+        document.addEventListener('DOMContentLoaded', initMap);
+
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+
+        <script>
+const monasteries = [
+  {% for monastery in monasteries %}
+  {
+    name: "{{ monastery.name|escapejs }}",
+    lat: {{ monastery.location_lat }},
+    lng: {{ monastery.location_lng }},
+    description: "{{ monastery.description|escapejs }}",
+    image: "{% if monastery.main_image %}{{ monastery.main_image.url }}{% endif %}",
+    panorama: "{% if monastery.virtual_360_image %}{{ monastery.virtual_360_image.url }}{% endif %}"
+  }{% if not forloop.last %},{% endif %}
+  {% endfor %}
+];
+</script>
+
+    </script>
+</body>
+</html>
+
+<a href="/tour/">Virtual Tours</a>
+<a href="/interactive/">Interactive Map</a>

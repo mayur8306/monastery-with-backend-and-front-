@@ -1,0 +1,580 @@
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Tours - Visit Sikkim</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8; /* A lighter, cooler grey */
+        }
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+        .dropdown-menu {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .nav-link {
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #f59e0b; /* Amber-500 */
+            transition: width 0.3s ease-in-out;
+        }
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+        .tour-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .tour-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+  
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <a href="index.html" class="flex items-center space-x-2">
+                    <div class="bg-slate-900 text-white rounded-full h-10 w-10 flex items-center justify-center">
+                        <i class="fa-solid fa-mountain-sun"></i>
+                    </div>
+                    <span class="text-2xl font-bold text-slate-800">VisitSikkim</span>
+                </a>
+
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-slate-600 hover:text-amber-500 font-medium nav-link">Home</a>
+                    
+                    <div class="relative dropdown">
+                        <button class="text-amber-500 font-medium nav-link flex items-center active">
+                            Explore <i class="fa-solid fa-chevron-down ml-2 text-xs"></i>
+                        </button>
+                        <div class="dropdown-menu absolute left-0 mt-2 w-48 bg-white rounded-lg shadow-xl py-2">
+                            <a href="tour.html" class="block px-4 py-2 text-slate-700 bg-amber-50 font-semibold">Virtual Tours</a>
+                            <a href="interactive.html" class="block px-4 py-2 text-slate-700 hover:bg-amber-50">Interactive Map</a>
+                            <a href="#" class="block px-4 py-2 text-slate-700 hover:bg-amber-50">Monastery Guide</a>
+                        </div>
+                    </div>
+                    
+                    <div class="relative dropdown">
+                        <button class="text-slate-600 hover:text-amber-500 font-medium nav-link flex items-center">
+                            Plan Your Visit <i class="fa-solid fa-chevron-down ml-2 text-xs"></i>
+                        </button>
+                        <div class="dropdown-menu absolute left-0 mt-2 w-56 bg-white rounded-lg shadow-xl py-2">
+                            <a href="#" class="block px-4 py-2 text-slate-700 hover:bg-amber-50">Events & Festivals</a>
+                            <a href="#" class="block px-4 py-2 text-slate-700 hover:bg-amber-50">Book an Experience</a>
+                            <a href="#" class="block px-4 py-2 text-slate-700 hover:bg-amber-50">Travel & Stay</a>
+                        </div>
+                    </div>
+                   
+                    <div class="relative dropdown">
+                        <button class="text-slate-600 hover:text-amber-500 font-medium nav-link flex items-center">
+                            Digital Archives <i class="fa-solid fa-chevron-down ml-2 text-xs"></i>
+                        </button>
+                        <div class="dropdown-menu absolute left-0 mt-2 w-56 bg-white rounded-lg shadow-xl py-2">
+                            <a href="#" class="block px-4 py-2 text-slate-700 hover:bg-amber-50">Search The Archives</a>
+                            <a href="#" class="block px-4 py-2 text-slate-700 hover:bg-amber-50">Manuscripts</a>
+                            <a href="#" class="block px-4 py-2 text-slate-700 hover:bg-amber-50">Murals & Art</a>
+                        </div>
+                    </div>
+                     <a href="#" class="text-slate-600 hover:text-amber-500 font-medium nav-link">About Us</a>
+                </div>
+
+                <div class="hidden md:flex items-center space-x-4">
+                     <a href="#" class="bg-amber-500 text-white font-semibold px-5 py-2 rounded-lg hover:bg-amber-600 transition duration-300">Login</a>
+                </div>
+
+                
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="text-slate-800 focus:outline-none">
+                        <i class="fa-solid fa-bars fa-lg"></i>
+                    </button>
+                </div>
+            </div>
+
+           
+            <div id="mobile-menu" class="hidden md:hidden mt-4">
+                <a href="index.html" class="block py-2 px-4 text-slate-600 hover:bg-amber-50 rounded">Home</a>
+                <div class="mt-2">
+                    <h3 class="font-semibold px-4 mb-2 text-amber-600">Explore</h3>
+                    <a href="tour.html" class="block py-2 px-6 text-sm text-slate-600 bg-amber-50 rounded font-semibold">Virtual Tours</a>
+                    <a href="#" class="block py-2 px-6 text-sm text-slate-600 hover:bg-amber-50 rounded">Interactive Map</a>
+                    <a href="#" class="block py-2 px-6 text-sm text-slate-600 hover:bg-amber-50 rounded">Monastery Guide</a>
+                </div>
+                <div class="mt-2">
+                    <h3 class="font-semibold px-4 mb-2 text-slate-800">Plan Your Visit</h3>
+                    <a href="#" class="block py-2 px-6 text-sm text-slate-600 hover:bg-amber-50 rounded">Events & Festivals</a>
+                    <a href="#" class="block py-2 px-6 text-sm text-slate-600 hover:bg-amber-50 rounded">Book an Experience</a>
+                    <a href="#" class="block py-2 px-6 text-sm text-slate-600 hover:bg-amber-50 rounded">Travel & Stay</a>
+                </div>
+                <div class="mt-2">
+                    <h3 class="font-semibold px-4 mb-2 text-slate-800">Digital Archives</h3>
+                     <a href="#" class="block py-2 px-6 text-sm text-slate-600 hover:bg-amber-50 rounded">Search The Archives</a>
+                    <a href="#" class="block py-2 px-6 text-sm text-slate-600 hover:bg-amber-50 rounded">Manuscripts</a>
+                    <a href="#" class="block py-2 px-6 text-sm text-slate-600 hover:bg-amber-50 rounded">Murals & Art</a>
+                </div>
+                 <a href="#" class="block py-2 px-4 text-slate-600 hover:bg-amber-50 rounded mt-2">About Us</a>
+                 <a href="#" class="block mt-4 w-full text-center bg-amber-500 text-white font-semibold px-5 py-2 rounded-lg hover:bg-amber-600 transition duration-300">Login</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+     
+        <section class="bg-slate-100 py-16">
+            <div class="container mx-auto px-6 text-center">
+                <h1 class="text-4xl md:text-5xl font-extrabold text-slate-800">Virtual Monastery Tours</h1>
+                <p class="mt-4 text-lg text-slate-600 max-w-3xl mx-auto">Step inside the serene and sacred monasteries of Sikkim from anywhere in the world. Use your mouse or finger to look around and explore these cultural treasures.</p>
+            </div>
+        </section>
+
+        
+        <section class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="grid md:grid-cols-2 gap-12">
+
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden tour-card border-t-4 border-amber-500">
+                        <div class="p-6">
+                            <h2 class="text-2xl font-bold text-slate-800 mb-3">Rumtek Monastery</h2>
+                            <p class="text-slate-600 mb-5 text-sm">Also known as the Dharmachakra Centre, Rumtek is a vibrant, sprawling complex and a pivotal center for Tibetan Buddhism. Explore its ornate prayer halls and stunning courtyards.</p>
+                        </div>
+                        <div class="px-2 pb-2">
+                            <iframe src="https://www.google.com/maps/embed?pb=!4v1758366461044!6m8!1m7!1sCAoSF0NJSE0wb2dLRUlDQWdJRHNqdWI4aWdF!2m2!1d27.30591310250971!2d88.53630179386377!3f315.41957297856976!4f20.702158082928023!5f0.7820865974627469" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        </div>
+                    </div>
+                 
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden tour-card border-t-4 border-amber-500">
+                         <div class="p-6">
+                            <h2 class="text-2xl font-bold text-slate-800 mb-3">Pemayangtse Monastery</h2>
+                            <p class="text-slate-600 mb-5 text-sm">One of the oldest and premier monasteries of Sikkim, it was founded for "pure monks" (ta-tshang). It is famed for its intricate wooden sculptures and commanding views of the Himalayas.</p>
+                        </div>
+                        <div class="px-2 pb-2">
+                            <iframe src="https://www.google.com/maps/embed?pb=!4v1758366607627!6m8!1m7!1sCAoSF0NJSE0wb2dLRUlDQWdJREVoSlhucEFF!2m2!1d27.30518919282202!2d88.25156580066201!3f3.576586162528436!4f-1.9628602163289344!5f0.7820865974627469" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        </div>
+                    </div>
+
+                 
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden tour-card border-t-4 border-amber-500">
+                        <div class="p-6">
+                            <h2 class="text-2xl font-bold text-slate-800 mb-3">Tashiding Monastery</h2>
+                            <p class="text-slate-600 mb-5 text-sm">Perched on a heart-shaped hill, Tashiding is considered the spiritual center of Sikkim. It is believed that a single glimpse of the monastery can cleanse one of all sins.</p>
+                        </div>
+                        <div class="px-2 pb-2">
+                           <iframe src="https://www.google.com/maps/embed?pb=!4v1758366652580!6m8!1m7!1sCAoSFkNJSE0wb2dLRUlDQWdJQ0V6c08zSWc.!2m2!1d27.30891943909927!2d88.29787983128344!3f271.4613269712747!4f-4.701245761199914!5f0.7820865974627469" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        </div>
+                    </div>
+
+                  
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden tour-card border-t-4 border-amber-500">
+                        <div class="p-6">
+                            <h2 class="text-2xl font-bold text-slate-800 mb-3">Ralang Monastery</h2>
+                            <p class="text-slate-600 mb-5 text-sm">Known for its impressive collection of paintings and thangkas, Ralang Monastery is a treasure of Buddhist art. It hosts the famous Pang Lhabsol festival, a spectacle of vibrant mask dances.</p>
+                        </div>
+                        <div class="px-2 pb-2">
+                            <iframe src="https://www.google.com/maps/embed?pb=!4v1758366685856!6m8!1m7!1sCAoSF0NJSE0wb2dLRUlDQWdJQ1JvY3FqcXdF!2m2!1d27.32849856209447!2d88.33547316295622!3f1.572276665561617!4f-36.64539921501505!5f0.7820865974627469" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        </div>
+                    </div>
+
+                
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden tour-card border-t-4 border-amber-500">
+                        <div class="p-6">
+                            <h2 class="text-2xl font-bold text-slate-800 mb-3">Enchey Monastery</h2>
+                            <p class="text-slate-600 mb-5 text-sm">Meaning 'the solitary temple', this 200-year-old monastery is a serene getaway located on a stunning ridge above Gangtok, offering spectacular views of Kanchenjunga.</p>
+                        </div>
+                        <div class="px-2 pb-2">
+                            <iframe src="https://www.google.com/maps/embed?pb=!4v1758366730924!6m8!1m7!1sCAoSF0NJSE0wb2dLRUlDQWdJQ0pzTXEzOWdF!2m2!1d27.33593677395685!2d88.61916587167339!3f48.10722845123618!4f8.351961626291768!5f0.7820865974627469" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        </div>
+                    </div>
+
+                   
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden tour-card border-t-4 border-amber-500">
+                        <div class="p-6">
+                            <h2 class="text-2xl font-bold text-slate-800 mb-3">Lingdum (Ranka) Monastery</h2>
+                            <p class="text-slate-600 mb-5 text-sm">Surrounded by lush forested mountains, Ranka Monastery is a vast and picturesque complex. It's a relatively new monastery and serves as a training center for young lamas.</p>
+                        </div>
+                        <div class="px-2 pb-2">
+                            <iframe src="https://www.google.com/maps/embed?pb=!4v1758366773664!6m8!1m7!1sCAoSF0NJSE0wb2dLRUlDQWdJQ011T2JkcmdF!2m2!1d27.33118603686677!2d88.5790941249777!3f10.352167525502182!4f17.59743569514316!5f0.7820865974627469" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+  
+    <footer class="bg-slate-800 text-slate-300">
+        <div class="container mx-auto px-6 py-12">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="font-bold text-white text-lg mb-4">VisitSikkim</h3>
+                    <p class="text-sm">Exploring the rich heritage and natural beauty of the Himalayan state.</p>
+                </div>
+                <div>
+                    <h3 class="font-bold text-white text-lg mb-4">Quick Links</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="index.html" class="hover:text-amber-400">Home</a></li>
+                        <li><a href="#" class="hover:text-amber-400">About Us</a></li>
+                        <li><a href="#" class="hover:text-amber-400">Contact</a></li>
+                        <li><a href="#" class="hover:text-amber-400">FAQ</a></li>
+                    </ul>
+                </div>
+                <div>
+                     <h3 class="font-bold text-white text-lg mb-4">Legal</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-amber-400">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-amber-400">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-bold text-white text-lg mb-4">Follow Us</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-xl hover:text-amber-400"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-xl hover:text-amber-400"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-xl hover:text-amber-400"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-xl hover:text-amber-400"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-12 border-t border-slate-700 pt-8 text-center text-sm text-slate-400">
+                <p>&copy; 2024 VisitSikkim. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+    </script>
+
+</body>
+</html>
+
+<a href="/tour/">Virtual Tours</a>
+<a href="/interactive/">Interactive Map</a>
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Virtual Tours – Visit Sikkim</title>
+
+  <!-- Tailwind & Fonts -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #f0f4f8; }
+    .dropdown:hover .dropdown-menu { display:block; }
+    .dropdown-menu { display:none; animation:fadeIn 0.3s ease-in-out; }
+    @keyframes fadeIn { from {opacity:0; transform:translateY(-10px);} to {opacity:1; transform:translateY(0);} }
+    .nav-link { position:relative; }
+    .nav-link::after {
+      content:''; position:absolute; width:0; height:2px; bottom:-4px; left:50%;
+      transform:translateX(-50%); background-color:#f59e0b; transition:width 0.3s ease-in-out;
+    }
+    .nav-link:hover::after, .nav-link.active::after { width:100%; }
+    .tour-card { transition:transform 0.3s ease, box-shadow 0.3s ease; }
+    .tour-card:hover { transform:translateY(-8px); box-shadow:0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04); }
+    .viewer-wrap { position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:0.5rem; }
+    .viewer-wrap iframe { position:absolute; top:0; left:0; width:100%; height:100%; transition:transform 0.3s ease; }
+    .viewer-wrap:hover iframe { transform:scale(1.02); }
+  </style>
+</head>
+<body class="antialiased">
+
+  <!-- Header -->
+  <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+    <nav class="container mx-auto px-6 py-4">
+      <div class="flex items-center justify-between">
+        <a href="index.html" class="flex items-center space-x-2">
+          <div class="bg-slate-900 text-white rounded-full h-10 w-10 flex items-center justify-center">
+            <i class="fa-solid fa-mountain-sun"></i>
+          </div>
+          <span class="text-2xl font-bold text-slate-800">VisitSikkim</span>
+        </a>
+
+        <!-- Desktop Menu -->
+        <div class="hidden md:flex items-center space-x-8">
+          <a href="index.html" class="text-slate-600 hover:text-amber-500 font-medium nav-link">Home</a>
+
+          <!-- Explore Dropdown -->
+          <div class="relative dropdown">
+            <button class="text-amber-500 font-medium nav-link flex items-center active">
+              Explore <i class="fa-solid fa-chevron-down ml-2 text-xs"></i>
+            </button>
+            <div class="dropdown-menu absolute left-0 mt-2 w-48 bg-white rounded-lg shadow-xl py-2">
+              <a href="tour.html" class="block px-4 py-2 text-slate-700 bg-amber-50 font-semibold">Virtual Tours</a>
+              <a href="interactive.html" class="block px-4 py-2 text-slate-700 hover:bg-amber-50">Interactive Map</a>
+              <a href="#" class="block px-4 py-2 text-slate-700 hover:bg-amber-50">Monastery Guide</a>
+            </div>
+          </div>
+
+          <a href="#" class="text-slate-600 hover:text-amber-500 font-medium nav-link">About Us</a>
+        </div>
+
+        <div class="hidden md:flex items-center space-x-4">
+          <a href="#" class="bg-amber-500 text-white font-semibold px-5 py-2 rounded-lg hover:bg-amber-600 transition duration-300">Login</a>
+        </div>
+
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+          <button id="mobile-menu-button" class="text-slate-800 focus:outline-none" aria-label="Toggle menu">
+            <i class="fa-solid fa-bars fa-lg"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Menu -->
+      <div id="mobile-menu" class="hidden md:hidden mt-4">
+        <a href="index.html" class="block py-2 px-4 text-slate-600 hover:bg-amber-50 rounded">Home</a>
+        <a href="tour.html" class="block py-2 px-4 text-slate-600 hover:bg-amber-50 rounded">Virtual Tours</a>
+        <a href="interactive.html" class="block py-2 px-4 text-slate-600 hover:bg-amber-50 rounded">Interactive Map</a>
+        <a href="#" class="block py-2 px-4 text-slate-600 hover:bg-amber-50 rounded">Monastery Guide</a>
+        <a href="#" class="block py-2 px-4 text-slate-600 hover:bg-amber-50 rounded mt-2">About Us</a>
+        <a href="#" class="block mt-4 w-full text-center bg-amber-500 text-white font-semibold px-5 py-2 rounded-lg hover:bg-amber-600 transition duration-300">Login</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="bg-slate-100 py-16 text-center">
+      <div class="container mx-auto px-6">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-slate-800">Virtual Monastery Tours</h1>
+        <p class="mt-4 text-lg text-slate-600 max-w-3xl mx-auto">
+          Step inside the serene and sacred monasteries of Sikkim from anywhere in the world.
+        </p>
+      </div>
+    </section>
+
+    <!-- Tours -->
+    <section class="py-20">
+      <div class="container mx-auto px-6 grid md:grid-cols-2 gap-12">
+
+        <!-- 10 Monastery Cards -->
+        <!-- Repeat this div for each monastery -->
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden tour-card border-t-4 border-amber-500">
+          <div class="p-6">
+            <h2 class="text-2xl font-bold text-slate-800 mb-3">Rumtek Monastery</h2>
+            <p class="text-slate-600 mb-5 text-sm">Also known as the Dharmachakra Centre, Rumtek is a vibrant center for Tibetan Buddhism with ornate prayer halls and stunning courtyards.</p>
+          </div>
+          <div class="px-2 pb-2">
+            <div class="viewer-wrap">
+              <iframe src="https://www.google.com/maps/embed?pb=!4v1758366461044!6m8!1m7!1sCAoSF0NJSE0wb2dLRUlDQWdJRHNqdWI4aWdF!2m2!1d27.30591310250971!2d88.53630179386377!3f315.41957297856976!4f20.702158082928023!5f0.7820865974627469" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden tour-card border-t-4 border-amber-500">
+          <div class="p-6">
+            <h2 class="text-2xl font-bold text-slate-800 mb-3">Pemayangtse Monastery</h2>
+            <p class="text-slate-600 mb-5 text-sm">One of the oldest in Sikkim, Pemayangtse is famous for its architecture and annual religious festivals.</p>
+          </div>
+          <div class="px-2 pb-2">
+            <div class="viewer-wrap">
+              <iframe src="https://www.google.com/maps/embed?pb=!4v1758366607627!6m8!1m7!1sCAoSF0NJSE0wb2dLRUlDQWdJREVoSlhucEFF!2m2!1d27.30518919282202!2d88.25156580066201!3f3.576586162528436!4f-1.9628602163289344!5f0.7820865974627469" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+          </div>
+        </div>
+          <!-- 3. Tashiding Monastery -->
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden tour-card border-t-4 border-amber-500">
+                <div class="p-6">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-3">Tashiding Monastery</h2>
+                    <p class="text-slate-600 mb-5 text-sm">Perched on a heart-shaped hill, Tashiding is considered the spiritual center of Sikkim with breathtaking views of the surrounding valley.</p>
+                </div>
+                <div class="px-2 pb-2">
+                    <iframe src="https://www.google.com/maps/embed?pb=!4v1758366652580!6m8!1m7!1sCAoSFkNJSE0wb2dLRUlDQWdJQ0V6c08zSWc.!2m2!1d27.30891943909927!2d88.29787983128344!3f271.4613269712747!4f-4.701245761199914!5f0.7820865974627469" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+            </div>
+
+            <!-- 4. Ralang Monastery -->
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden tour-card border-t-4 border-amber-500">
+                <div class="p-6">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-3">Ralang Monastery</h2>
+                    <p class="text-slate-600 mb-5 text-sm">Ralang is famous for its thangkas and hosts the Pang Lhabsol festival with vibrant mask dances.</p>
+                </div>
+                <div class="px-2 pb-2">
+                    <iframe src="https://www.google.com/maps/embed?pb=!4v1758366685856!6m8!1m7!1sCAoSF0NJSE0wb2dLRUlDQWdJQ1JvY3FqcXdF!2m2!1d27.32849856209447!2d88.33547316295622!3f1.572276665561617!4f-36.64539921501505!5f0.7820865974627469" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+            </div>
+
+            <!-- 5. Enchey Monastery -->
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden tour-card border-t-4 border-amber-500">
+                <div class="p-6">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-3">Enchey Monastery</h2>
+                    <p class="text-slate-600 mb-5 text-sm">Located near Gangtok, Enchey Monastery is a serene place known for its vibrant architecture and religious rituals.</p>
+                </div>
+                <div class="px-2 pb-2">
+                    <iframe src="https://www.google.com/maps/embed?pb=!4v1758366730924!6m8!1m7!1sCAoSF0NJSE0wb2dLRUlDQWdJQ0pzTXEzOWdF!2m2!1d27.33593677395685!2d88.61916587167339!3f48.10722845123618!4f8.351961626291768!5f0.7820865974627469" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+            </div>
+
+            <!-- 6. Lingdum (Ranka) Monastery -->
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden tour-card border-t-4 border-amber-500">
+                <div class="p-6">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-3">Lingdum (Ranka) Monastery</h2>
+                    <p class="text-slate-600 mb-5 text-sm">Ranka Monastery is surrounded by forested hills and serves as a training center for young lamas.</p>
+                </div>
+                <div class="px-2 pb-2">
+                    <iframe src="https://www.google.com/maps/embed?pb=!4v1758366773664!6m8!1m7!1sCAoSF0NJSE0wb2dLRUlDQWdJQ011T2JkcmdF!2m2!1d27.33118603686677!2d88.5790941249777!3f10.352167525502182!4f17.59743569514316!5f0.7820865974627469" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+            </div>
+
+            <!-- 7. Phodong Monastery -->
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden tour-card border-t-4 border-amber-500">
+                <div class="p-6">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-3">Phodong Monastery</h2>
+                    <p class="text-slate-600 mb-5 text-sm">Phodong is a large North Sikkim monastery, famous for its festivals and historical significance.</p>
+                </div>
+                <div class="px-2 pb-2">
+                
+                    <iframe src="https://www.google.com/maps/embed?pb=!4v1758448302970!6m8!1m7!1sCAoSFkNJSE0wb2dLRUlDQWdJRGg0OURqV3c.!2m2!1d27.41303405816734!2d88.58375766744783!3f247.70801761829193!4f-0.4384713937216418!5f0.7820865974627469" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+
+            <!-- 8. Dubdi Monastery -->
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden tour-card border-t-4 border-amber-500">
+                <div class="p-6">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-3">Dubdi Monastery</h2>
+                    <p class="text-slate-600 mb-5 text-sm">Dubdi, founded in 1701, is Sikkim's oldest monastery, known for its serene atmosphere and historical importance.</p>
+                </div>
+                <div class="px-2 pb-2">
+                   <iframe src="https://www.google.com/maps/embed?pb=!4v1758448510673!6m8!1m7!1sCAoSF0NJSE0wb2dLRUlDQWdJRFVpdHkxNndF!2m2!1d27.36655288826205!2d88.22999220879571!3f120.56569783018783!4f8.356587994060462!5f1.6042862222192795" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+
+            <!-- 9. Sanga Choeling Monastery -->
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden tour-card border-t-4 border-amber-500">
+                <div class="p-6">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-3">Sanga Choeling Monastery</h2>
+                    <p class="text-slate-600 mb-5 text-sm">Sanga Choeling is a small but historically important monastery, perched on a hilltop overlooking the Teesta River.</p>
+                </div>
+                <div class="px-2 pb-2">
+                <iframe src="https://www.google.com/maps/embed?pb=!4v1758448686126!6m8!1m7!1sCAoSFkNJSE0wb2dLRUlDQWdJQzRfcGJLV3c.!2m2!1d27.29746481037325!2d88.22196361693797!3f350.67287718675726!4f-2.9168179732531456!5f0.871436929645572" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+
+            <!-- 10. Karma Dubgyu Chholing Monastery -->
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden tour-card border-t-4 border-amber-500">
+                <div class="p-6">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-3">Karma Dubgyu Chholing Monastery</h2>
+                    <p class="text-slate-600 mb-5 text-sm">A peaceful monastery located in West Sikkim, known for its meditation sessions and scenic surroundings.</p>
+                </div>
+                <div class="px-2 pb-2">
+                    <iframe src="https://www.google.com/maps/embed?pb=!4v1758448897425!6m8!1m7!1sPBVpYb0ffFOyQq8iRdFzqA!2m2!1d34.09614441843386!2d77.60177538249145!3f40.61746252779859!4f-3.1072292428178656!5f0.7820865974627469" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+
+        </div>
+    </div>
+</section>
+        <!-- Add remaining 8 monasteries in same structure -->
+        <!-- Tashiding, Ralang, Enchey, Lingdum, Phodong, Dubdi, Sanga Choeling, Karma Dubgyu Chholing -->
+        <!-- Use the same structure with iframe wrapped in .viewer-wrap -->
+
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-slate-800 text-slate-300">
+    <div class="container mx-auto px-6 py-12 grid md:grid-cols-4 gap-8">
+      <div>
+        <h3 class="font-bold text-white text-lg mb-4">VisitSikkim</h3>
+        <p class="text-sm">Exploring the rich heritage and natural beauty of the Himalayan state.</p>
+      </div>
+      <div>
+        <h3 class="font-bold text-white text-lg mb-4">Quick Links</h3>
+        <ul class="space-y-2 text-sm">
+          <li><a href="index.html" class="hover:text-amber-400">Home</a></li>
+          <li><a href="#" class="hover:text-amber-400">About Us</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="font-bold text-white text-lg mb-4">Legal</h3>
+        <ul class="space-y-2 text-sm">
+          <li><a href="#" class="hover:text-amber-400">Privacy Policy</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="font-bold text-white text-lg mb-4">Follow Us</h3>
+        <div class="flex space-x-4">
+          <a href="#" class="text-xl hover:text-amber-400"><i class="fab fa-facebook"></i></a>
+          <a href="#" class="text-xl hover:text-amber-400"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="mt-12 border-t border-slate-700 pt-8 text-center text-sm text-slate-400">
+      &copy; 2024 VisitSikkim. All Rights Reserved.
+    </div>
+  </footer>
+
+  <!-- Mobile menu toggle -->
+  <script>
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    mobileMenuButton.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+  </script>
+
+</body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Virtual Monastery Tours</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-100">
+
+<h1 class="text-4xl font-bold text-center my-8">Virtual Monastery Tours</h1>
+
+<div class="container mx-auto px-6 grid md:grid-cols-2 gap-8">
+  {% for monastery in monasteries %}
+    <div class="bg-white rounded-lg shadow-lg p-4 tour-card border-t-4 border-amber-500">
+      <h2 class="text-2xl font-bold text-slate-800 mb-3">{{ monastery.name }}</h2>
+      <p class="text-slate-600 mb-4">{{ monastery.description }}</p>
+      <div class="viewer-wrap">
+        {% if monastery.virtual_image %}
+          <iframe src="{{ monastery.virtual_image.url }}" frameborder="0" allowfullscreen></iframe>
+        {% else %}
+          <iframe src="{{ monastery.iframe_url }}" frameborder="0" allowfullscreen></iframe>
+        {% endif %}
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+</body>
+</html>
+
+</html>
