@@ -1,0 +1,12 @@
+Django>=4.2
+djangorestframework>=3.14
+djangorestframework-simplejwt>=5.2.2
+django-cors-headers>=4.0
+Pillow>=10.0
+torch>=2.0
+transformers>=4.40
+numpy>=1.25
+django-cleanup>=6.2
+requests>=2.31
+geopy>=2.4
+python-dotenv>=1.0
